@@ -1,0 +1,200 @@
+
+DROP DATABASE IF EXISTS tecnostore;
+CREATE DATABASE tecnostore;
+USE tecnostore;
+
+
+CREATE TABLE empleados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    rol ENUM('ADMINISTRADOR', 'VENDEDOR') NOT NULL
+);
+
+CREATE TABLE celulares (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(100) NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    sistema_operativo ENUM('ANDROID', 'IOS') NOT NULL,
+    gama ENUM('ALTA', 'MEDIA', 'BAJA') NOT NULL
+);
+
+CREATE TABLE clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    identificacion VARCHAR(50) UNIQUE NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20)
+);
+
+CREATE TABLE ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    empleado_id INT NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id),
+    FOREIGN KEY (empleado_id) REFERENCES empleados(id)
+);
+
+CREATE TABLE detalles_venta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    venta_id INT NOT NULL,
+    celular_id INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (venta_id) REFERENCES ventas(id) ON DELETE CASCADE,
+    FOREIGN KEY (celular_id) REFERENCES celulares(id)
+);
+
+CREATE TABLE auditoria_celulares (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    celular_id INT NOT NULL,
+    accion VARCHAR(50) NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    usuario VARCHAR(100)
+);
+
+
+
+DELIMITER $$
+
+-- SP 1: Registrar una venta (devuelve el ID generado)
+CREATE PROCEDURE sp_registrar_venta(
+    IN p_cliente_id INT,
+    IN p_empleado_id INT,
+    IN p_total DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO ventas (cliente_id, empleado_id, total)
+    VALUES (p_cliente_id, p_empleado_id, p_total);
+    SELECT LAST_INSERT_ID() AS id_venta;
+END$$
+
+-- SP 2: Agregar un detalle a la venta
+CREATE PROCEDURE sp_agregar_detalle_venta(
+    IN p_venta_id INT,
+    IN p_celular_id INT,
+    IN p_cantidad INT,
+    IN p_precio_unitario DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO detalles_venta (venta_id, celular_id, cantidad, precio_unitario)
+    VALUES (p_venta_id, p_celular_id, p_cantidad, p_precio_unitario);
+END$$
+
+-- SP 3: Descontar stock manualmente (por si se necesita fuera del trigger)
+CREATE PROCEDURE sp_descontar_stock(
+    IN p_celular_id INT,
+    IN p_cantidad INT
+)
+BEGIN
+    UPDATE celulares SET stock = stock - p_cantidad WHERE id = p_celular_id;
+END$$
+
+-- SP 4: Listar todos los celulares
+CREATE PROCEDURE sp_listar_celulares()
+BEGIN
+    SELECT * FROM celulares ORDER BY id DESC;
+END$$
+
+-- SP 5: Buscar cliente por identificación
+CREATE PROCEDURE sp_buscar_cliente_por_identificacion(
+    IN p_identificacion VARCHAR(50)
+)
+BEGIN
+    SELECT * FROM clientes WHERE identificacion = p_identificacion;
+END$$
+
+-- SP 6: Registrar un nuevo celular
+CREATE PROCEDURE sp_registrar_celular(
+    IN p_marca VARCHAR(50), IN p_modelo VARCHAR(100),
+    IN p_precio DECIMAL(10,2), IN p_stock INT,
+    IN p_sistema_operativo VARCHAR(20), IN p_gama VARCHAR(20)
+)
+BEGIN
+    INSERT INTO celulares (marca, modelo, precio, stock, sistema_operativo, gama)
+    VALUES (p_marca, p_modelo, p_precio, p_stock, p_sistema_operativo, p_gama);
+END$$
+
+-- SP 7: Actualizar un celular
+CREATE PROCEDURE sp_actualizar_celular(
+    IN p_id INT, IN p_marca VARCHAR(50), IN p_modelo VARCHAR(100),
+    IN p_precio DECIMAL(10,2), IN p_stock INT,
+    IN p_sistema_operativo VARCHAR(20), IN p_gama VARCHAR(20)
+)
+BEGIN
+    UPDATE celulares 
+    SET marca = p_marca, modelo = p_modelo, precio = p_precio, 
+        stock = p_stock, sistema_operativo = p_sistema_operativo, gama = p_gama
+    WHERE id = p_id;
+END$$
+
+-- SP 8: Eliminar un celular
+CREATE PROCEDURE sp_eliminar_celular(IN p_id INT)
+BEGIN
+    DELETE FROM celulares WHERE id = p_id;
+END$$
+
+-- SP 9: Registrar un nuevo cliente
+CREATE PROCEDURE sp_registrar_cliente(
+    IN p_nombre VARCHAR(100), IN p_identificacion VARCHAR(50),
+    IN p_correo VARCHAR(100), IN p_telefono VARCHAR(20)
+)
+BEGIN
+    INSERT INTO clientes (nombre, identificacion, correo, telefono)
+    VALUES (p_nombre, p_identificacion, p_correo, p_telefono);
+END$$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+-- TRIGGER 1: Auditoría cuando se actualiza un celular
+CREATE TRIGGER tr_auditoria_celular_update
+AFTER UPDATE ON celulares
+FOR EACH ROW
+BEGIN
+    INSERT INTO auditoria_celulares (celular_id, accion, usuario)
+    VALUES (NEW.id, 'UPDATE', CURRENT_USER());
+END$$
+
+-- TRIGGER 2: Validar stock ANTES de insertar un detalle de venta
+CREATE TRIGGER tr_validar_stock_antes_detalle
+BEFORE INSERT ON detalles_venta
+FOR EACH ROW
+BEGIN
+    DECLARE stock_actual INT;
+    SELECT stock INTO stock_actual FROM celulares WHERE id = NEW.celular_id;
+    
+    IF stock_actual < NEW.cantidad THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Stock insuficiente para este celular';
+    END IF;
+END$$
+
+-- TRIGGER 3: Actualizar stock DESPUÉS de insertar un detalle de venta
+CREATE TRIGGER tr_actualizar_stock_despues_detalle
+AFTER INSERT ON detalles_venta
+FOR EACH ROW
+BEGIN
+    UPDATE celulares SET stock = stock - NEW.cantidad WHERE id = NEW.celular_id;
+END$$
+
+DELIMITER ;
+
+
+
+INSERT INTO empleados (nombre, usuario, password, rol) VALUES 
+('Admin Principal', 'admin', '1234', 'ADMINISTRADOR'),
+('Vendedor Juan', 'vendedor', '1234', 'VENDEDOR');
+
+INSERT INTO celulares (marca, modelo, precio, stock, sistema_operativo, gama) VALUES 
+('Samsung', 'Galaxy S24', 999.99, 10, 'ANDROID', 'ALTA'),
+('Apple', 'iPhone 15', 1099.99, 8, 'IOS', 'ALTA'),
+('Xiaomi', 'Redmi Note 13', 299.99, 20, 'ANDROID', 'MEDIA');
