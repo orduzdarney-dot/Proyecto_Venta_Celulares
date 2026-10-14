@@ -16,11 +16,11 @@ public class Main {
     public static void main(String[] args) {
         MenuView menuView = new MenuView();
         
-        // 1. Iniciar sesión
+       
         LoginController loginController = new LoginController();
         Empleado empleadoActual = loginController.ejecutar();
 
-        // 2. Menú Principal según el Rol
+    
         int opcion;
         do {
             menuView.mostrarMensaje("\n--- MENÚ PRINCIPAL (" + empleadoActual.getRol() + ") ---");
