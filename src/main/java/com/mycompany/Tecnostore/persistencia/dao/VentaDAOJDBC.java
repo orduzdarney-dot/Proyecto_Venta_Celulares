@@ -61,13 +61,14 @@ public class VentaDAOJDBC implements VentaDAO {
                 v.setFecha(rs.getTimestamp("fecha").toLocalDateTime());
                 v.setTotalConIva(rs.getDouble("total"));
                 
-                // Creamos un cliente básico solo para mostrar el nombre en el reporte
+                
                 Cliente cliente = new Cliente();
                 cliente.setNombre(rs.getString("cliente_nombre"));
-                // Asignamos el cliente a la venta (necesitaremos un setter temporal o usar el constructor)
-                // Para simplificar, usaremos reflexión o un setter. Asumamos que tenemos setCliente en Venta.
+
+
+
+
                 
-                // Cargar detalles de esta venta
                 cargarDetalles(conn, v);
                 ventas.add(v);
             }
@@ -88,8 +89,10 @@ public class VentaDAOJDBC implements VentaDAO {
                     Celular cel = new Celular();
                     cel.setMarca(rsDet.getString("marca"));
                     cel.setModelo(rsDet.getString("modelo"));
-                    // Nota: Para que el reporte funcione perfecto, el ID del celular debería cargarse aquí también.
-                    // Lo dejaremos simplificado para el texto del reporte.
+
+
+
+                    
                     DetalleVenta det = new DetalleVenta(cel, rsDet.getInt("cantidad"), rsDet.getDouble("precio_unitario"));
                     venta.agregarDetalle(det);
                 }
