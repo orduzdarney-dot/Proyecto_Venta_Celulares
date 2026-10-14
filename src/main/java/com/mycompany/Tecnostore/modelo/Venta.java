@@ -23,7 +23,7 @@ public class Venta {
     }
 
     public Venta(Cliente cliente, Empleado empleado) {
-        this(); // Llama al constructor vacío para inicializar lista y fecha
+        this(); 
         this.cliente = cliente;
         this.empleado = empleado;
     }
