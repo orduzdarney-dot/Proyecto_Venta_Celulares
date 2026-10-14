@@ -108,5 +108,3 @@ src/main/java/com/mycompany/Tecnostore/
 Desarrollado por **Darney Orduz**  
 🔗 [GitHub Profile](https://github.com/orduzdarney-dot)
 
----
-*Proyecto desarrollado con fines académicos y de portafolio profesional.*
