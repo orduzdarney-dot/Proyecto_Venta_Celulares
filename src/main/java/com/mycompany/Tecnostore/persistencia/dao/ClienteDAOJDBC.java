@@ -24,7 +24,7 @@ public class ClienteDAOJDBC implements ClienteDAO {
                     c.setNombre(rs.getString("nombre"));
                     c.setIdentificacion(rs.getString("identificacion"));
                     
-                    // 👇 Aquí atrapamos la excepción del correo
+                   
                     try {
                         c.setCorreo(rs.getString("correo"));
                     } catch (EmailInvalidoException e) {
@@ -72,9 +72,9 @@ public class ClienteDAOJDBC implements ClienteDAO {
                 c.setNombre(rs.getString("nombre"));
                 c.setIdentificacion(rs.getString("identificacion"));
                 
-                // 👇 Aquí también atrapamos la excepción del correo
-                try {
-                    c.setCorreo(rs.getString("correo"));
+         
+            try {
+                 c.setCorreo(rs.getString("correo"));
                 } catch (EmailInvalidoException e) {
                     throw new DAOException("Error de datos en la base de datos (correo inválido)", e);
                 }
