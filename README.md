@@ -111,7 +111,7 @@ Desarrollado por **Darney Orduz**
 
 
 
-
+```
 
 
 <img width="1494" height="1739" alt="Captura desde 2026-10-14 10-31-06" src="https://github.com/user-attachments/assets/232c92e6-86d9-4986-b110-4c2f033f9cb3" />
