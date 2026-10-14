@@ -22,7 +22,7 @@ public class ClienteService {
     }
 
     public void registrarCliente(Cliente cliente) throws DAOException, IdentificacionDuplicadaException {
-        // Validar que no exista
+       
         Cliente existente = clienteDAO.buscarPorIdentificacion(cliente.getIdentificacion());
         if (existente != null) {
             throw new IdentificacionDuplicadaException("Ya existe un cliente con la identificación: " + cliente.getIdentificacion());
