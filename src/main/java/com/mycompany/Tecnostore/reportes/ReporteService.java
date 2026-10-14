@@ -37,7 +37,7 @@ public class ReporteService {
                 .collect(Collectors.toList());
     }
 
-    // 3. Ventas totales por mes
+    
     public Map<Month, Double> obtenerVentasPorMes(List<Venta> ventas) {
         return ventas.stream()
                 .collect(Collectors.groupingBy(
