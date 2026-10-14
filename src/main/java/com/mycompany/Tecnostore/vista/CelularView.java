@@ -14,7 +14,7 @@ public class CelularView {
         this.menuView = menuView;
     }
 
-    // 👇 AQUÍ ESTÁ EL CAMBIO CLAVE: se agregaron los "throws"
+    
     public Celular pedirDatosCelular() throws PrecioInvalidoException, StockInvalidoException {
         menuView.mostrarMensaje("--- Registrar Nuevo Celular ---");
         String marca = menuView.pedirTexto("Marca");
