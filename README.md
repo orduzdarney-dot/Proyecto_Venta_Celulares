@@ -108,3 +108,14 @@ src/main/java/com/mycompany/Tecnostore/
 Desarrollado por **Darney Orduz**  
 🔗 [GitHub Profile](https://github.com/orduzdarney-dot)
 
+
+
+
+
+
+
+<img width="1494" height="1739" alt="Captura desde 2026-10-14 10-31-06" src="https://github.com/user-attachments/assets/232c92e6-86d9-4986-b110-4c2f033f9cb3" />
+<img width="1494" height="1739" alt="Captura desde 2026-10-14 10-30-51" src="https://github.com/user-attachments/assets/734e3dba-3f7f-4be6-8509-3bb3a552a2bc" />
+<img width="1494" height="1739" alt="Captura desde 2026-10-14 10-30-13" src="https://github.com/user-attachments/assets/4815b998-41b3-4e1c-b563-62b8518a625c" />
+<img width="1494" height="1739" alt="Captura desde 2026-10-14 10-28-57" src="https://github.com/user-attachments/assets/5d53746f-8676-4b5d-ad1b-521f9dbf93de" />
+
