@@ -51,5 +51,62 @@ El sistema delega la lógica pesada a la base de datos MySQL mediante:
 
 ### 2. Configuración de la Base de Datos
 1. Accede a tu consola de MySQL:
-   ```bash
+```bash
    mysql -u tu_usuario -p
+```
+2. Ejecuta el script SQL proporcionado en el proyecto (o disponible en la documentación) para crear la base de datos, tablas, procedimientos almacenados, triggers y datos de prueba.
+   *(Nota: El script incluye `DROP DATABASE IF EXISTS`, lo que reiniciará la base de datos).*
+
+### 3. Configuración del Proyecto
+1. Clona este repositorio:
+```bash
+   git clone https://github.com/orduzdarney-dot/Proyecto_Venta_Celulares.git
+   cd Proyecto_Venta_Celulares
+```
+2. Abre el archivo `src/main/java/com/mycompany/Tecnostore/persistencia/conexion/ConexionDB.java` y actualiza tus credenciales de MySQL:
+```java
+   private static final String USUARIO = "tu_usuario_mysql";
+   private static final String PASSWORD = "tu_contraseña_mysql";
+```
+
+### 4. Compilar y Ejecutar
+Desde la terminal, en la raíz del proyecto, ejecuta:
+
+```bash
+# 1. Limpiar y compilar el proyecto
+mvn clean package
+
+# 2. Ejecutar el archivo JAR generado
+java -jar target/VentaCelulares-1.0-SNAPSHOT.jar
+```
+
+## 🔑 Credenciales de Prueba
+
+El script de base de datos incluye los siguientes usuarios por defecto:
+
+| Rol | Usuario | Contraseña |
+| :--- | :--- | :--- |
+| **Administrador** | `admin` | `1234` |
+| **Vendedor** | `vendedor` | `1234` |
+
+## 📂 Estructura del Proyecto
+
+```text
+src/main/java/com/mycompany/Tecnostore/
+├── Main.java                  # Punto de entrada
+├── controlador/               # Lógica de coordinación (MVC)
+├── excepciones/               # Excepciones personalizadas
+├── modelo/                    # Entidades y Enums
+├── persistencia/              # Conexión (Singleton) y DAOs
+├── reportes/                  # Lógica de generación de informes (Stream API)
+├── servicio/                  # Reglas de negocio y Patrones (Strategy, Factory)
+└── vista/                     # Interfaz de consola (Scanner, System.out)
+```
+
+## 👨‍💻 Autor
+
+Desarrollado por **Darney Orduz**  
+🔗 [GitHub Profile](https://github.com/orduzdarney-dot)
+
+---
+*Proyecto desarrollado con fines académicos y de portafolio profesional.*
