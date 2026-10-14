@@ -41,7 +41,7 @@ public class Main {
                     case 5: menuView.mostrarMensaje("¡Hasta luego!"); break;
                     default: menuView.mostrarError("Opción no válida");
                 }
-            } else { // VENDEDOR
+            } else { 
                 menuView.mostrarMensaje("1. Gestión de Clientes");
                 menuView.mostrarMensaje("2. Realizar Ventas");
                 menuView.mostrarMensaje("3. Salir");
