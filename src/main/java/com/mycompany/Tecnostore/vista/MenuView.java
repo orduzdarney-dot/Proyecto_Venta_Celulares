@@ -24,11 +24,11 @@ public class MenuView {
     public int pedirOpcion(String mensaje) {
         System.out.print(mensaje + " -> ");
         int op = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el salto de línea restante
+        scanner.nextLine(); 
         return op;
     }
 
-    // 👇 AQUÍ ESTABA EL ERROR: Ahora solo lee una vez
+    
     public String pedirTexto(String mensaje) {
         System.out.print(mensaje + " -> ");
         return scanner.nextLine(); 
@@ -37,14 +37,14 @@ public class MenuView {
     public double pedirNumero(String mensaje) {
         System.out.print(mensaje + " -> ");
         double val = scanner.nextDouble();
-        scanner.nextLine(); // Limpiar el salto de línea restante
+        scanner.nextLine(); 
         return val;
     }
 
     public int pedirEntero(String mensaje) {
         System.out.print(mensaje + " -> ");
         int val = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el salto de línea restante
+        scanner.nextLine();
         return val;
     }
 
@@ -57,7 +57,7 @@ public class MenuView {
         System.out.println(mensaje + " (1=Si, 0=No)");
         System.out.print("Opción -> ");
         int op = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el salto de línea restante
+        scanner.nextLine(); 
         return op == 1;
     }
 }
