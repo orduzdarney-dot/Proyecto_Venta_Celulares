@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class ReporteService {
 
-    // 1. Celulares con stock bajo (< 5)
+    
     public List<Celular> obtenerCelularesStockBajo(List<Celular> celulares) {
         return celulares.stream()
                 .filter(c -> c.getStock() < 5)
@@ -23,17 +23,17 @@ public class ReporteService {
                 .collect(Collectors.toList());
     }
 
-    // 2. Top 3 de celulares más vendidos
+  
     public List<Map.Entry<Celular, Long>> obtenerTop3MasVendidos(List<Venta> ventas) {
         return ventas.stream()
-                .flatMap(v -> v.getDetalles().stream()) // Aplanar: sacar todos los detalles de todas las ventas
+                .flatMap(v -> v.getDetalles().stream()) 
                 .collect(Collectors.groupingBy(
-                        DetalleVenta::getCelular,       // Agrupar por objeto Celular
-                        Collectors.summingLong(DetalleVenta::getCantidad) // Sumar cantidades
+                        DetalleVenta::getCelular,       
+                        Collectors.summingLong(DetalleVenta::getCantidad) 
                 ))
                 .entrySet().stream()
-                .sorted(Map.Entry.<Celular, Long>comparingByValue().reversed()) // Ordenar de mayor a menor
-                .limit(3) // Solo los 3 primeros
+                .sorted(Map.Entry.<Celular, Long>comparingByValue().reversed())
+                .limit(3) 
                 .collect(Collectors.toList());
     }
 
@@ -41,14 +41,14 @@ public class ReporteService {
     public Map<Month, Double> obtenerVentasPorMes(List<Venta> ventas) {
         return ventas.stream()
                 .collect(Collectors.groupingBy(
-                        v -> v.getFecha().getMonth(), // Agrupar por mes de la fecha
-                        Collectors.summingDouble(Venta::getTotalConIva) // Sumar totales
+                        v -> v.getFecha().getMonth(), 
+                        Collectors.summingDouble(Venta::getTotalConIva) 
                 ));
     }
 
-    // 4. Generar archivo reporte_ventas.txt
+   
     public void generarReporteTxt(List<Venta> ventas, String nombreArchivo) throws IOException {
-        // TRY-WITH-RESOURCES: El archivo se cierra solo al terminar el bloque
+       
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(nombreArchivo)))) {
             
             writer.println("=========================================");
