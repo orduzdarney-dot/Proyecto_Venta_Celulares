@@ -70,7 +70,7 @@ public class CelularController {
             return;
         }
         Celular nuevosDatos = view.pedirDatosCelular();
-        nuevosDatos.setId(id); // Mantener el mismo ID
+        nuevosDatos.setId(id); 
         service.actualizarCelular(nuevosDatos);
         menuView.mostrarExito("Celular actualizado exitosamente.");
     }
