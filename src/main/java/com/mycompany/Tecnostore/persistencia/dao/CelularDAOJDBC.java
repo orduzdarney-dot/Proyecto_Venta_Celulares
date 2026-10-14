@@ -28,7 +28,7 @@ public class CelularDAOJDBC implements CelularDAO {
                 c.setMarca(rs.getString("marca"));
                 c.setModelo(rs.getString("modelo"));
                 
-                // 👇 Aquí atrapamos las excepciones porque los setters ahora las lanzan
+                
                 try {
                     c.setPrecio(rs.getDouble("precio"));
                     c.setStock(rs.getInt("stock"));
@@ -109,8 +109,8 @@ public class CelularDAOJDBC implements CelularDAO {
                     c.setMarca(rs.getString("marca"));
                     c.setModelo(rs.getString("modelo"));
                     
-                    // 👇 Aquí también atrapamos las excepciones
-                    try {
+                  
+                try {
                         c.setPrecio(rs.getDouble("precio"));
                         c.setStock(rs.getInt("stock"));
                     } catch (PrecioInvalidoException | StockInvalidoException e) {
