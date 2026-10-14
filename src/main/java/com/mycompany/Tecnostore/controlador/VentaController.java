@@ -55,7 +55,7 @@ public class VentaController {
     }
 
     private void realizarVenta() throws DAOException, StockInsuficienteException {
-        // 1. Identificar Cliente
+        
         String idCliente = menuView.pedirTexto("Ingrese la identificación del cliente");
         Cliente cliente = clienteService.buscarCliente(idCliente);
         if (cliente == null) {
@@ -63,10 +63,10 @@ public class VentaController {
             return;
         }
 
-        // 2. Crear Venta
+        
         Venta venta = new Venta(cliente, empleadoActual);
         
-        // 3. Agregar Productos (Carrito)
+        
         boolean seguirAgregando = true;
         while (seguirAgregando) {
             List<Celular> catalogo = celularService.listarCelulares();
@@ -82,7 +82,7 @@ public class VentaController {
             }
             
             int cantidad = ventaView.pedirCantidad();
-            // Creamos el detalle y lo agregamos a la venta
+            
             DetalleVenta detalle = new DetalleVenta(celular, cantidad, celular.getPrecio());
             venta.agregarDetalle(detalle);
             
@@ -90,7 +90,7 @@ public class VentaController {
             seguirAgregando = ventaView.confirmarAccion("¿Desea agregar otro producto?");
         }
 
-        // 4. Confirmar y Guardar
+        
         if (ventaView.confirmarAccion("¿Confirma la venta?")) {
             ventaService.registrarVenta(venta);
             ventaView.mostrarTicketVenta(venta);
