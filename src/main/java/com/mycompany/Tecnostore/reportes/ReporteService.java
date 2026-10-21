@@ -17,12 +17,23 @@ public class ReporteService {
 
     
     public List<Celular> obtenerCelularesStockBajo(List<Celular> celulares) {
-        return celulares.stream()
-                .filter(c -> c.getStock() < 5)
-                .sorted(Comparator.comparingInt(Celular::getStock))
-                .collect(Collectors.toList());
-    }
+    return celulares.stream()
+            .filter(c -> c.getStock() < 5)
+            .sorted(Comparator.comparingInt(Celular::getStock))
+            .collect(Collectors.toList());
+}
 
+public void generarArchivoStockBajo(List<Celular> celulares, String nombreArchivo) throws IOException {
+    try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(nombreArchivo)))) {
+        writer.println("--- ALERTA DE STOCK BAJO ---");
+        for (Celular c : celulares) {
+            writer.println("ID: " + c.getId() + " | Modelo: " + c.getModelo() + 
+                          " | Marca: " + c.getMarca() + 
+                          " | Stock: " + c.getStock() + 
+                          " | Precio: " + c.getPrecio());
+        }
+    }
+}
   
     public List<Map.Entry<Celular, Long>> obtenerTop3MasVendidos(List<Venta> ventas) {
         return ventas.stream()
